@@ -82,4 +82,17 @@ playwright install
 
 ---
 ```
+🔽 التحميل
+📁 لتحميل الأداة مباشرة من GitHub:
+
+🔗 اضغط هنا لزيارة مستودع FFZF على GitHub
+
+أو استخدم الأمر التالي في الطرفية:
+
+bash
+Copy
+Edit
+git clone https://github.com/foefvjfev33/FFZF.git
+cd FFZF
+python ffzf.py
 
