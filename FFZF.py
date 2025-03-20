@@ -18,58 +18,62 @@ class FuzzerGUI:
         self.setup_widgets()
 
     def setup_widgets(self):
-        tk.Label(self.root, text="Target URL:").pack(anchor="w", padx=10, pady=5)
+        tk.Label(self.root, text="Target URL:").grid(row=0, column=0, sticky="w", padx=10, pady=5)
         self.url_entry = tk.Entry(self.root, width=100)
-        self.url_entry.pack(padx=10)
+        self.url_entry.grid(row=0, column=1, padx=10, pady=5)
 
-        tk.Label(self.root, text="Request Type:").pack(anchor="w", padx=10, pady=5)
+        tk.Label(self.root, text="Request Type:").grid(row=1, column=0, sticky="w", padx=10, pady=5)
         self.request_type = tk.StringVar(value="GET")
-        ttk.Combobox(self.root, textvariable=self.request_type, values=["GET", "POST", "HEAD"]).pack(padx=10)
+        ttk.Combobox(self.root, textvariable=self.request_type, values=["GET", "POST", "HEAD"]).grid(row=1, column=1, padx=10, pady=5)
 
-        tk.Label(self.root, text="POST Data (optional, use FUZZ):").pack(anchor="w", padx=10, pady=5)
+        tk.Label(self.root, text="POST Data (optional, use FUZZ):").grid(row=2, column=0, sticky="w", padx=10, pady=5)
         self.post_data = tk.Text(self.root, height=3)
-        self.post_data.pack(padx=10, fill="x")
+        self.post_data.grid(row=2, column=1, padx=10, pady=5, sticky="ew")
 
-        tk.Label(self.root, text="Headers (JSON format):").pack(anchor="w", padx=10, pady=5)
+        tk.Label(self.root, text="Headers (JSON format):").grid(row=3, column=0, sticky="w", padx=10, pady=5)
         self.headers_entry = tk.Text(self.root, height=3)
-        self.headers_entry.pack(padx=10, fill="x")
+        self.headers_entry.grid(row=3, column=1, padx=10, pady=5, sticky="ew")
 
-        tk.Button(self.root, text="Select Wordlist", command=self.select_wordlist).pack(pady=5)
+        tk.Button(self.root, text="Select Wordlist", command=self.select_wordlist).grid(row=4, column=0, pady=5)
         self.wordlist_path = tk.StringVar()
-        tk.Label(self.root, textvariable=self.wordlist_path).pack(pady=2)
+        tk.Label(self.root, textvariable=self.wordlist_path).grid(row=4, column=1, pady=2, sticky="w")
 
         self.delay_label = tk.Label(self.root, text="Delay between requests (ms):")
-        self.delay_label.pack(anchor="w", padx=10)
+        self.delay_label.grid(row=5, column=0, sticky="w", padx=10)
         self.delay_var = tk.IntVar(value=0)
-        tk.Spinbox(self.root, from_=0, to=5000, textvariable=self.delay_var).pack(padx=10)
+        tk.Spinbox(self.root, from_=0, to=5000, textvariable=self.delay_var).grid(row=5, column=1, padx=10)
 
         self.bypass_var = tk.BooleanVar()
-        tk.Checkbutton(self.root, text="💥 Try WAF Bypass Headers", variable=self.bypass_var).pack(anchor="w", padx=10, pady=5)
+        tk.Checkbutton(self.root, text="💥 Try WAF Bypass Headers", variable=self.bypass_var).grid(row=6, column=0, sticky="w", padx=10, pady=5)
 
         self.js_mode = tk.BooleanVar()
-        tk.Checkbutton(self.root, text="🧐 JavaScript Rendering (Playwright)", variable=self.js_mode).pack(anchor="w", padx=10, pady=5)
+        tk.Checkbutton(self.root, text="🧐 JavaScript Rendering (Playwright)", variable=self.js_mode).grid(row=6, column=1, sticky="w", padx=10, pady=5)
 
         self.regex_var = tk.StringVar()
-        tk.Label(self.root, text="🔍 Regex to extract from response (optional):").pack(anchor="w", padx=10)
-        tk.Entry(self.root, textvariable=self.regex_var, width=100).pack(padx=10, pady=5)
+        tk.Label(self.root, text="🔍 Regex to extract from response (optional):").grid(row=7, column=0, sticky="w", padx=10)
+        tk.Entry(self.root, textvariable=self.regex_var, width=100).grid(row=7, column=1, padx=10, pady=5)
 
         self.output_filter_var = tk.StringVar()
-        tk.Label(self.root, text="📌 Filter results (regex or keyword):").pack(anchor="w", padx=10)
-        tk.Entry(self.root, textvariable=self.output_filter_var, width=100).pack(padx=10, pady=5)
+        tk.Label(self.root, text="📌 Filter results (regex or keyword):").grid(row=8, column=0, sticky="w", padx=10)
+        tk.Entry(self.root, textvariable=self.output_filter_var, width=100).grid(row=8, column=1, padx=10, pady=5)
 
         self.start_button = tk.Button(self.root, text="🚀 Start Fuzzing", command=self.start_fuzzing)
-        self.start_button.pack(pady=10)
+        self.start_button.grid(row=9, column=0, columnspan=2, pady=10)
 
         self.tree = ttk.Treeview(self.root, columns=("URL", "Status", "Length", "Extracted"), show="headings")
         self.tree.heading("URL", text="URL")
         self.tree.heading("Status", text="Status Code")
         self.tree.heading("Length", text="Length")
         self.tree.heading("Extracted", text="Extracted")
-        self.tree.pack(expand=True, fill="both", padx=10, pady=10)
+        self.tree.grid(row=10, column=0, columnspan=2, sticky="nsew", padx=10, pady=10)
 
         self.save_button = tk.Button(self.root, text="📂 Save Results", command=self.save_results)
-        self.save_button.pack(pady=5)
+        self.save_button.grid(row=11, column=0, columnspan=2, pady=5)
         self.results = []
+
+        # Configure grid weights
+        self.root.grid_rowconfigure(10, weight=1)
+        self.root.grid_columnconfigure(1, weight=1)
 
     def select_wordlist(self):
         file_path = filedialog.askopenfilename(title="Select Wordlist File")
